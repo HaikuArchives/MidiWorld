@@ -35,6 +35,7 @@
 #include <String.h> //for BString
 #include <stdio.h>
 #include <StorageKit.h>
+#include <Roster.h>
 
 const char* DESKBAR_SIGNATURE = "application/x-vnd.Be-TSKB";
 
@@ -57,7 +58,7 @@ int32 load_db_prefs(void *data)
 
 DeskbarView::DeskbarView(BRect frame)
 		: BView(frame, "MidiDeskbarView",B_FOLLOW_ALL, B_WILL_DRAW | B_FULL_UPDATE_ON_RESIZE| B_WILL_ACCEPT_FIRST_CLICK | B_PULSE_NEEDED)
-{ 
+{
 	regular=true;
 	DBMenu = new BPopUpMenu("DeskbarMenu",false);
 	InitStuff();
@@ -215,8 +216,8 @@ void DeskbarView::AttachedToWindow(void)
 	DBMenu->SetTargetForItems(this);
 	DBMenu->SetRadioMode(false);
 
-	if (Parent()) 
-		SetViewColor(Parent()->ViewColor()); 
+	if (Parent())
+		SetViewColor(Parent()->ViewColor());
 
 	BView::AttachedToWindow();
 }
@@ -240,7 +241,7 @@ void DeskbarView::MouseDown(BPoint point)
 {
 	//display the menu here
 	int32 buttons = 0;
-	
+
 	Window()->CurrentMessage()->FindInt32("buttons", &buttons);
 
 	GetMouse(&point,(uint32 *)&buttons, true);
@@ -258,13 +259,13 @@ void DeskbarView::OpenPlaylist()
 	BFilePanel *OpenObject=new BFilePanel(B_OPEN_PANEL,new BMessenger(this));
 	OpenObject->Show();
 }
-	
+
 void DeskbarView::AddPlaylists()
 {
 	status_t err;
 	BFile *pFile = new BFile();
 	err = pFile->SetTo(last_playlist.Path(), B_READ_WRITE);
-	//Now we check to see if it is there, if it isn't then we don't want to 
+	//Now we check to see if it is there, if it isn't then we don't want to
 	//do anything else, or if the list is not empty that means that
 	//someone opened another playlist we don't want both lists
 	if(err == B_ENTRY_NOT_FOUND)
@@ -287,7 +288,7 @@ void DeskbarView::OpenFile(BFile *pFile)
 	message.Unflatten(pFile);
 	//Now lets get all the midi's and add them to our list!
 	int32 i = 0;
-	while (message.FindRef("midis", i++, &midiRef) == B_OK) 
+	while (message.FindRef("midis", i++, &midiRef) == B_OK)
 	{
 		if(BEntry(&midiRef).Exists())
 		{
@@ -316,10 +317,10 @@ void DeskbarView::MessageReceived(BMessage *message)
 		{
 			int i=0;
 			entry_ref my_midi_ref;
-			while (message->FindRef("refs", i++, &my_midi_ref) == B_OK) 
+			while (message->FindRef("refs", i++, &my_midi_ref) == B_OK)
 	    	{
 				//check to see if the midiplaylist exists first
-				if(BEntry(&my_midi_ref).Exists()) 
+				if(BEntry(&my_midi_ref).Exists())
 				{
 					BNode mynode(&my_midi_ref);
 					char type[B_MIME_TYPE_LENGTH];
@@ -355,7 +356,7 @@ void DeskbarView::MessageReceived(BMessage *message)
 		{
 			char bla[] = "MidiWorld! created by Brendan Allen\n"
 								"Deskbar and Desktop replicant! Hope you enjoy it!";
-			(new BAlert("", bla, "OK COOL!"))->Go();		
+			(new BAlert("", bla, "OK COOL!"))->Go();
 			break;
 		}
 		case DB_PLAY:
@@ -413,7 +414,7 @@ void DeskbarView::MessageReceived(BMessage *message)
 			CurrentPlayingMidi.SetTempo(tempo);
 			CurrentPlayingMidi.ScaleTempoBy(0.5);
 			break;
-		} 
+		}
 		case DB_T150:
 		{
 			CurrentPlayingMidi.SetTempo(tempo);
@@ -572,7 +573,7 @@ void DeskbarView::MessageReceived(BMessage *message)
 			break;
 		}
 		default:
-			BView::MessageReceived(message);			
+			BView::MessageReceived(message);
 			break;
 	}
 }
@@ -609,7 +610,7 @@ void DeskbarView::Pulse()
 			paused=false;
 		}
 		else
-		{	//no more files to play start at beginning? 
+		{	//no more files to play start at beginning?
 			//Set it to beginning, get the first item and the item that was playing
 			m_item->SetMarked(false);	m_item=play->ItemAt(0);
 			m_item->SetMarked(true);
@@ -629,7 +630,7 @@ void DeskbarView::SavePrefs()
 	//things to save -- which playlist was open and where
 	//volume & reverb
 	status_t err;
-	//Lets find the path to our preferences and set it	
+	//Lets find the path to our preferences and set it
 	BPath pPath;
 	BFile *pFile = new BFile();
 	BDirectory this_dir;

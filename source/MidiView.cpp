@@ -8,9 +8,9 @@
 // in all of the files you use.
 // ***********************************************
 
-// ----------------------------------------------------------------------- 
-// MidiView.cpp 
-// ----------------------------------------------------------------------- 
+// -----------------------------------------------------------------------
+// MidiView.cpp
+// -----------------------------------------------------------------------
 #include "MidiView.h"
 #include "MidiApp.h"
 #include "MidiItem.h"
@@ -34,6 +34,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <OS.h>
+#include <MenuBar.h>
 
 int32 load_prefs(void *data);
 int32 stop_midi_thread(void *data);
@@ -59,8 +60,8 @@ int32 stop_midi_thread(void *data)
 	return B_OK;
 }
 
-MidiView::MidiView(BRect frame) 
-	: BView(frame, "MidiView", B_FOLLOW_ALL, B_WILL_DRAW | B_PULSE_NEEDED) 
+MidiView::MidiView(BRect frame)
+	: BView(frame, "MidiView", B_FOLLOW_ALL, B_WILL_DRAW | B_PULSE_NEEDED)
 {
 	current=NULL; //the current MidiItem
 	saveFile=NULL;
@@ -79,7 +80,7 @@ MidiView::MidiView(BRect frame)
 	BRect bla(10,25,170,205);
 	MidiList = new MidiListView(bla);
 	midi_scroll=new BScrollView("MidiScroll",MidiList,B_FOLLOW_ALL,0,false,true,B_FANCY_BORDER);
-//Make the main menu bar	
+//Make the main menu bar
 	main_menu_bar = new BMenuBar(BRect(0,0,this->Frame().Width(),19), "main");
 //Add the reverb menu
 	reverb_menu = new BMenu("Reverb");
@@ -131,7 +132,7 @@ MidiView::MidiView(BRect frame)
 	//add items to menu
 	//file menu
 	file_m->AddItem(AddMidis);
-	file_m->AddItem(OpenList); file_m->AddItem(SaveList); 
+	file_m->AddItem(OpenList); file_m->AddItem(SaveList);
 	file_m->AddSeparatorItem();
 	file_m->AddItem(about);
 	file_m->AddSeparatorItem();
@@ -257,7 +258,7 @@ void MidiView::MessageReceived(BMessage *message)
 				wait_for_thread(find_thread("stop_midi_thread"), &nothing);
 			}
 			load_midi();
-				
+
 			break;
 		}
 		case TEMPO_CHANGED:
@@ -267,7 +268,7 @@ void MidiView::MessageReceived(BMessage *message)
 			if(CurrentPlayingMidi.IsFinished() == false)
 			{
 				if(MidiList->IsEmpty() == true)
-				{ 
+				{
 					Tempo->SetValue(100);
 					Tempo->SetLabel("Tempo 100%");
 				}
@@ -377,10 +378,10 @@ void MidiView::MessageReceived(BMessage *message)
 		}
 		case B_SAVE_REQUESTED: //save the playlist
 		{
-			entry_ref da_ref;			
+			entry_ref da_ref;
 			BPath pPath; //for pathname
 			BEntry entry; //used to make path
-			
+
 			message->FindRef("directory",&da_ref);
 			const char *name=message->FindString("name");//for the filename they chose
 			entry.SetTo(&da_ref);
@@ -424,7 +425,7 @@ void MidiView::MessageReceived(BMessage *message)
 		{
 			if(be_synth->IsReverbEnabled()==false)
 				be_synth->EnableReverb(true);
-			be_synth->SetReverb(B_REVERB_GARAGE);			
+			be_synth->SetReverb(B_REVERB_GARAGE);
 			break;
 		}
 		case REVERB_BALLROOM:
@@ -495,7 +496,7 @@ void MidiView::MessageReceived(BMessage *message)
 			{
 				if(MidiList->IsEmpty() == false)
 					CurrentPlayingMidi.Position((CurrentPlayingMidi.Duration() * (position->Value())) / 100.0);
-			}	
+			}
 			break;
 		}
 		//Here's the easiest to deal with
@@ -580,7 +581,7 @@ void MidiView::SavePlayList(BPath pPath)
 	BFile pFile; //used to save it
 	status_t err; //for return code
 	BMessage midi_loc;
-	//now we set the file to the path		
+	//now we set the file to the path
 	pFile.SetTo(pPath.Path(), B_READ_WRITE | B_CREATE_FILE);
 	//We add all the ref's into a BMessage which will index them since
 	//if a message name is already there it creates an array of them
@@ -588,7 +589,7 @@ void MidiView::SavePlayList(BPath pPath)
 	{	//Find the Item
 		MidiItem *bla = (MidiItem *)MidiList->ItemAt(i);
 		//add the ref to the BMessage
-		midi_loc.AddRef("midis", &bla->midi_path);		
+		midi_loc.AddRef("midis", &bla->midi_path);
 	}
 	//Now what this does is basically store the message inside of pFile
 	//which is alot easier to read the info back later
@@ -622,7 +623,7 @@ void MidiView::Pulse(void)
 		//call load midi
 		load_midi(midi_index);
 	}
-	//Move the position slider if it is playing 
+	//Move the position slider if it is playing
 	MidiItem *daItem = current;
 	if(is_playing == true && daItem->paused == false)
 		position->SetValue(((float)CurrentPlayingMidi.Seek() / (float)CurrentPlayingMidi.Duration())*100.00);
@@ -631,7 +632,7 @@ void MidiView::Pulse(void)
 void MidiView::SavePreferences()
 {
 	status_t err;
-	//Lets find the path to our preferences and set it	
+	//Lets find the path to our preferences and set it
 	BPath pPath;
 	BFile *pFile = new BFile();
 	BDirectory this_dir;
@@ -642,7 +643,7 @@ void MidiView::SavePreferences()
 	pPath.Append("preferences");
 	err = pFile->SetTo(pPath.Path(), B_READ_WRITE | B_CREATE_FILE );
 
-	//Lets store our attributes	
+	//Lets store our attributes
 	long *val = new long;
 	pFile->WriteAttr("looping", B_BOOL_TYPE, 0, &looping, sizeof(bool));
 	pFile->WriteAttr("auto_save", B_BOOL_TYPE, 0, &auto_save, sizeof(bool));
@@ -653,18 +654,18 @@ void MidiView::SavePreferences()
 	//Add one for volume
 	*val = volume_control->Value();
 	pFile->WriteAttr("volume", B_INT32_TYPE, 0, val, sizeof(long));
-	
+
 	//Get windows Left and Top corner values and save those too
 	float *left = new float;
 	float *top = new float;
 	*left = w_left; *top = w_top;
 	pFile->WriteAttr("left_corner", B_FLOAT_TYPE, 0, left, sizeof(float));
 	pFile->WriteAttr("top_corner", B_FLOAT_TYPE, 0, top, sizeof(float));
-	
+
 	SaveDefault();
 	//delete the stuff we made
 	delete pFile;
-	delete val; 
+	delete val;
 }
 
 void MidiView::SaveDefault()
@@ -738,7 +739,7 @@ void MidiView::OpenDefault()
 	find_directory(B_USER_SETTINGS_DIRECTORY, &pPath);
 	pPath.Append("MidiWorld/Default");
 	err = pFile->SetTo(pPath.Path(), B_READ_ONLY);
-	//Now we check to see if it is there, if it isn't then we don't want to 
+	//Now we check to see if it is there, if it isn't then we don't want to
 	//do anything else, or if the list is not empty that means that
 	//someone opened another playlist we don't want both lists
 	if(err == B_ENTRY_NOT_FOUND || MidiList->IsEmpty() == false)
@@ -752,7 +753,7 @@ void MidiView::OpenDefault()
 	message.Unflatten(pFile);
 	//Now lets get all the midi's and add them to our list!
 	int32 i = 0;
-	while (message.FindRef("midis", i++, &midiRef) == B_OK) 
+	while (message.FindRef("midis", i++, &midiRef) == B_OK)
 	{
 		if(BEntry(&midiRef).Exists())
 		{
@@ -767,7 +768,7 @@ void MidiView::load_midi(int num_to_load)
 	//this is the default
 	if(num_to_load==-1)
 		num_to_load=MidiList->CurrentSelection();
-		
+
 	current = (MidiItem *)MidiList->ItemAt(num_to_load);
 	MidiItem *daItem=current;
 	if(CurrentPlayingMidi.LoadFile(&daItem->midi_path) == B_OK)
@@ -796,13 +797,13 @@ void MidiView::stop_midi()
 	Pause->SetEnabled(false);
 	if(MidiList->CurrentSelection() < 0)
 		PlayStop->SetEnabled(false);
-	
+
 }
 
 void MidiView::add_da_refs(entry_ref midiRef, BMessage *message)
 {// Look for refs in the message
 	int32 i = 0;
-	while (message->FindRef("refs", i++, &midiRef) == B_OK) 
+	while (message->FindRef("refs", i++, &midiRef) == B_OK)
        {
   		char type[B_MIME_TYPE_LENGTH];
   		(new BNodeInfo(new BNode(&midiRef)))->GetType(type);
@@ -846,11 +847,11 @@ void MidiView::ShowInstruments()
 {
 	int16 insts[128];
 	int16 count;
-	
+
 	CurrentPlayingMidi.GetPatches(insts, &count);
 	printf("\nShowing instruments\n");
 	int n=0;
-	
+
 	while(n < count)
 	{
 	  switch(insts[n])
@@ -880,7 +881,7 @@ void MidiView::ShowInstruments()
 		  case B_CLAVICHORD:
 				printf("\nB_CLAVICHORD\n");
 		       break;
-		
+
 		  // Tuned Idiophones
 		  case B_CELESTA:
 				printf("\nB_CELESTA\n");
@@ -906,7 +907,7 @@ void MidiView::ShowInstruments()
 		  case B_DULCIMER:
 				printf("\nB_DULCIMER\n");
 		       break;
-		
+
 		  // Organs
 		  case B_DRAWBAR_ORGAN:
 				printf("\nB_DRAWBAR_ORGAN\n");
@@ -932,8 +933,8 @@ void MidiView::ShowInstruments()
 		  case B_TANGO_ACCORDION:
 				printf("\nB_TANGO_ACCORDION\n");
 		       break;
-		
-		  // Guitars 
+
+		  // Guitars
 		  case B_ACOUSTIC_GUITAR_NYLON:
 				printf("\nB_ACOUSTIC_GUITAR_NYLON\n");
 		       break;
@@ -958,7 +959,7 @@ void MidiView::ShowInstruments()
 		  case B_GUITAR_HARMONICS:
 				printf("\nB_GUITAR_HARMONICS\n");
 		       break;
-		  
+
 		  // Basses
 		  case B_ACOUSTIC_BASS:
 				printf("\nB_ACOUSTIC_BASS\n");
@@ -984,8 +985,8 @@ void MidiView::ShowInstruments()
 		  case B_SYNTH_BASS_2:
 				printf("\nB_SYNTH_BASS_2\n");
 		       break;
-		
-		  // Strings 
+
+		  // Strings
 		  case B_VIOLIN:
 				printf("\nB_VIOLIN\n");
 		       break;
@@ -1010,8 +1011,8 @@ void MidiView::ShowInstruments()
 		  case B_TIMPANI:
 				printf("\nB_TIMPANI\n");
 		       break;
-		
-		  // Ensemble strings and voices 
+
+		  // Ensemble strings and voices
 		  case B_STRING_ENSEMBLE_1:
 				printf("\nB_STRING_ENSEMBLE_1\n");
 		       break;
@@ -1036,8 +1037,8 @@ void MidiView::ShowInstruments()
 		  case B_ORCHESTRA_HIT:
 				printf("\nB_ORCHESTRA_HIT\n");
 		       break;
-		
-		  // Brass 
+
+		  // Brass
 		  case B_TRUMPET:
 				printf("\nB_TRUMPET\n");
 		       break;
@@ -1062,8 +1063,8 @@ void MidiView::ShowInstruments()
 		  case B_SYNTH_BRASS_2:
 				printf("\nB_SYNTH_BRASS_2\n");
 		       break;
-		
-		  // Reeds 
+
+		  // Reeds
 		  case B_SOPRANO_SAX:
 				printf("\nB_SOPRANO_SAX\n");
 		       break;
@@ -1088,8 +1089,8 @@ void MidiView::ShowInstruments()
 		  case B_CLARINET:
 				printf("\nB_CLARINET\n");
 		       break;
-		
-		  // Pipes 
+
+		  // Pipes
 		  case B_PICCOLO:
 				printf("\nB_PICCOLO\n");
 		       break;
@@ -1114,7 +1115,7 @@ void MidiView::ShowInstruments()
 		  case B_OCARINA:
 				printf("\nB_OCARINA\n");
 		       break;
-		
+
 		  // Synth Leads
 		  case B_SQUARE_WAVE:
 				printf("\nB_SQUARE_WAVE\n");
@@ -1140,8 +1141,8 @@ void MidiView::ShowInstruments()
 		  case B_BASS_LEAD:
 				printf("\nB_BASS_LEAD:\n");
 		       break;
-		  
-		  // Synth Pads 
+
+		  // Synth Pads
 		  case B_NEW_AGE:
 				printf("\nB_NEW_AGE\n");
 		       break;
@@ -1166,8 +1167,8 @@ void MidiView::ShowInstruments()
 		  case B_SWEEP:
 				printf("\nB_SWEEP\n");
 		       break;
-		
-		  // Effects 
+
+		  // Effects
 		  case B_FX_1:
 				printf("\nB_FX_1\n");
 		       break;
@@ -1192,8 +1193,8 @@ void MidiView::ShowInstruments()
 		  case B_FX_8:
 				printf("\nB_FX_8\n");
 		       break;
-		
-		  // Ethnic 
+
+		  // Ethnic
 		  case B_SITAR:
 				printf("\nB_SITAR\n");
 		       break;
@@ -1218,8 +1219,8 @@ void MidiView::ShowInstruments()
 		  case B_SHANAI:
 				printf("\nB_SHANA\n");
 		       break;
-		
-		  // Percussion 
+
+		  // Percussion
 		  case B_TINKLE_BELL:
 				printf("\nB_TINKLE_BELL\n");
 		       break;
@@ -1244,8 +1245,8 @@ void MidiView::ShowInstruments()
 		  case B_REVERSE_CYMBAL:
 				printf("\nB_REVERSE_CYMBAL\n");
 		       break;
-		
-		  // Sound Effects 
+
+		  // Sound Effects
 		  case B_FRET_NOISE:
 				printf("\nB_FRET_NOISE\n");
 		       break;

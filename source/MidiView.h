@@ -8,9 +8,9 @@
 // in all of the files you use.
 // ***********************************************
 
-// ----------------------------------------------------------------------- 
-// MidiView.h 
-// ----------------------------------------------------------------------- 
+// -----------------------------------------------------------------------
+// MidiView.h
+// -----------------------------------------------------------------------
 #ifndef _MIDI_V_H_
 #define _MIDI_V_H_
 
@@ -24,10 +24,11 @@
 #include <ScrollView.h>
 #include "MidiListView.h"
 #include "MidiItem.h"
+#include <FilePanel.h>
 
-class MidiView : public BView 
-{ 
-	  
+class MidiView : public BView
+{
+
 	public:
 		MidiView(BRect frame);
 		~MidiView();
@@ -48,13 +49,13 @@ class MidiView : public BView
 		void ShowInstruments();
 
 		float w_top, w_left; //this is to save the window's position
-		
+
 		bool is_playing; //this is used to see if *any* midi is playing
 						//not just the currently selected item
 		bool looping; //true = loop all, false = loop current
 		bool play_on_start; //true means to start playing when midi world is launched
 		bool auto_save; //automatically saves the playlist once you have saved it
-		
+
 		MidiItem *current;
 		BPath playlist_path;
 		//File Openers
@@ -67,7 +68,7 @@ class MidiView : public BView
 		entry_ref midiRef;
 		BMenuBar *main_menu_bar;
 		//File menu (or mini-icon menu)
-		BMenu *file_m;		
+		BMenu *file_m;
 		BMenuItem *SaveList, *about, *Quit, *OpenList, *AddMidis;
 		//Midi menu
 		BMenu *midi_m;

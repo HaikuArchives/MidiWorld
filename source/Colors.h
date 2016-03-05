@@ -3,6 +3,8 @@
 #ifndef _COLORS_H_
 #define _COLORS_H_
 
+#include <GraphicsDefs.h>
+
 //Be standard UI colors
 const rgb_color BeBackgroundGrey = 		{216,216,216,	255};
 const rgb_color BeInactiveControlGrey = {240,240,240,	255};
