@@ -1,0 +1,119 @@
+MidiWorld! 1.7.3 Readme!
+If you like this application you can give the creator some money ($3-5) to:
+
+Brendan Allen
+ISLE Software
+2750 E. Midland Rd.
+Indianapolis, IN 46227
+
+If you find any bugs report them to darkmoon96@tcon.net
+
+New/Changed stuff since 1.7.2
+* Fixed a bug where if you had only one midi and removed it while it
+was playing and added another midi through the menu after that and
+double clicked the newly added file it would crash.
+* Made it so when you stop a midi by clicking on the menu it doesn't
+freeze up the interface for a few seconds anymore
+* I noticed Reverb and Transpose were not working so I got them
+working again.  Sorry for any inconvenience.
+
+New/Changed stuff since 1.7.1
+* Fixed a bug where once it finished the playlist it would crash
+instead of loop.
+
+New/Changed stuff since 1.7:
+* Fixed a bug where if you had not previous version of MidiWorld! it
+would crash on opening
+
+New/Changed stuff since 1.5:
+* Drag and Drop is much, much better now.  It is more like CL-Amp now.
+* Added a preferences where it automatically saves your playlist if you for
+   example drag it onto MidiWorld!, double click it, etc.  What this does is if
+   you remove items or add them you won't have to save your list again.
+   (This preference can be toggled)
+* Fixed a bug where if you moved the song that was currently playing around
+   that when it went to the next song it would not actually be the next one in
+   the list. (Finally figured that one out =)
+* Fixed a bug where the Reverb menu showing what it was instead of Reverb
+   (ie whenever something in that menu was selected it would show up instead
+    of reverb, not really a bug, but not how I wanted it)
+* Fixed a bug where if you dragged a Playlist onto the list while it was playing 
+  the song would keep playing even though it wasn't there anymore
+
+New/Changed stuff since 1.25:
+* Source code is now included
+* Drag and Drop within the list is much better but less pretty but it works better
+* There is a playlist on open menu item if it is checked then it will play the default playlist on open.
+* A new interface, takes less space + keyboard shortcuts
+* Loading MidiWorld! is much faster if you have a large default playlist
+* Finally I got the deskbar replicant to work!!
+GUI:  There is a way for the desktop and the deskbar
+	* Click on the icon in the corner and click Add To Deskbar for Deskbar.
+	* Click on the dragger in the corner and drag it to the Desktop
+Command-line:(in case you want this in your UserBootscript)
+	MidiWorld! -deskbar
+	(the other command line stuff was taken out, it really wasn't needed)
+Other notes:
+	It saves the volume and reverb and what playlist you had open.  So whatever playlist 
+you opened last within the replicant is the one that will load
+To get this to work you might have to remove the mimetype for MidiWorld!
+The file should be located at:
+	/boot/home/config/settings/beos_mime/application/x-vnd.isle-bug.midiworld
+Just delete it and it will be recreated when you launch MidiWorld! again.
+* There is now a shuffle button which randomly reorders the items in the list
+
+How to use it:
+	The Intel version is in the intel folder. The PowerPC version you have to compile yourself
+now because I don't have access to a powerpc machine, just open up a Terminal window and
+go to the MidiWorld! directory and type make the resulting file should be in obj.ppc directory.  Open
+the one which corresponds with your computer.  You drag midi files onto the list.  Double click on the 
+midi you want to play(and it will start).  It will play all the ones you put on it until it get to the last 
+one unless the loop boxes are checked.
+
+Controls:
+Tempo slider - To change the tempo of the current playing midi, you can go from 10% speed to 300%.  
+Volume slider - this slider controls the volume of the midi
+Position slider - the position slider controls where in the midi it is and you can move it to
+almost any position
+Menus:
+File:
+	Add Midis - Allows you to pick and choose midis to add to the list
+	Open Playlist - Allows you to pick a playlist to open
+	Save Playlist - Saves a list of midi's and you are able to double click this file later
+	About MidiWorld! - Tells a little bit about the application
+	Quit - Quits MidiWorld!
+
+Preferences:
+	Loop submenu:
+		Loop All - loops all the midis in the list
+		Loop Current - the current one will play forever
+	Playlist On Open - if selected the default playlist will play on open
+	Auto Save Playlist - if selected whatever playlist you open any changes
+	you make to it will be saved to the file you opened.
+Midi:
+	Play - can also be used to play a file. 
+	Stop - To stop a midi from playing(this is not shown unless a midi is playing)
+	Pause  -To pause the currrent midi
+	Resume - If it is paused this menu item will be shown to resume playing the midi
+	Reset Tempo - To reset it to the original tempo
+	Remove Item - remove an item from the list
+	Reverb submenu - This menu lets you set the different types of reverb that the BeOS allows
+	Transpose submenu - This menu transposes the midi up or down and you can reset it too
+	Shuffle Midis - randomly reorders the list of midis
+	
+Deskbar/Desktop Replicant! items
+Play menu - this will show you all the items in the playlist you opened and click on one will play that and it will continue on down the list and start from the top again
+Stop menu item - to stop a midi from playing
+Pause menu item - pauses the midi
+Resume menu item - to resume the midi (only shown if it is paused)
+Open Playlist menu item - opens a File Panel and lets you pick a playlist
+Add Midis - opens a File Panel and lets you pick midis (you can shift-click to select > 1)
+About MidiWorld! Replicant - an about box telling about the replicant
+Launch MidiWorld! - this item launches the full MidiWorld! application
+Volume - changes the volume
+Tempo - changes the tempo
+Reverb - changes the reverb
+Transpose - transposes the midi up, down, or resets it
+Remove From Deskbar - remove the replicant from the Deskbar
+
+That's all!  Read the StuffToWorkOn text file for stuff I still am planning on doing.
